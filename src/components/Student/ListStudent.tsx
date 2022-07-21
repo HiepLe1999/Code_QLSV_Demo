@@ -1,6 +1,5 @@
 import { Button, Space, Table, Input } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import { AudioOutlined } from "@ant-design/icons";
 import React, { useEffect, useRef, useState } from "react";
 import { ModalRefAttribute } from "../../common/types/ModalType";
 import { StudentModal } from "./StudentModal";
@@ -113,7 +112,7 @@ export const ListStudent: React.FC = () => {
     });
    
     setStudents(searchData);
-}}
+}
   return (
     
     <>
@@ -138,3 +137,4 @@ export const ListStudent: React.FC = () => {
     </>
   );
 };
+
