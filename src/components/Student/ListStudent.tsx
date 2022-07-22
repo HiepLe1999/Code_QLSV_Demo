@@ -1,10 +1,9 @@
 import { Button, Space, Table, Input } from "antd";
-import type { ColumnsType } from "antd/es/table";
+import type { ColumnsType, TableProps } from "antd/es/table";
 import React, { useEffect, useRef, useState } from "react";
 import { ModalRefAttribute } from "../../common/types/ModalType";
 import { StudentModal } from "./StudentModal";
 
-// initial data
 
 interface Student {
   id: number;
@@ -15,8 +14,6 @@ interface Student {
 }
 
 const { Search } = Input;
-
-
 
 export const ListStudent: React.FC = () => {
   const columns: ColumnsType<Student> = [
@@ -29,7 +26,7 @@ export const ListStudent: React.FC = () => {
       title: "Name",
       dataIndex: "name",
       key: "name",
-      render: (text) => <a>{text}</a>,
+      // render: (text) => <a>{text}</a>,
     },
     {
       title: "Age",
@@ -40,6 +37,13 @@ export const ListStudent: React.FC = () => {
       title: "Gender",
       dataIndex: "gender",
       key: "sex",
+      filters: [
+        { text: "Male", value: "male" },
+        { text: "Female", value: "female" },
+        { text: "Other", value: "other" },
+      ],
+      onFilter: (value: any, record) => record.gender.startsWith(value),
+      filterSearch: true,
     },
     {
       title: "Address",
@@ -73,6 +77,8 @@ export const ListStudent: React.FC = () => {
 
     if (datast !== null) setStudents(JSON.parse(datast));
   }, []);
+
+  // Add
   const openModal = async () => {
     const result = await modalRef!.current!.show();
     const data = [...students, result.data];
@@ -80,11 +86,13 @@ export const ListStudent: React.FC = () => {
     console.log(data);
     localStorage.setItem("student_list", JSON.stringify(data));
   };
-
+  //  Reset
+  const Reset = () => {
+    window.location.reload();
+  };
   const handle_Edit = async (record: any) => {
     const result = await modalRef!.current!.show(record);
     console.log(result);
-
     const data = students.map((s) => {
       if (s.id === result.data.id) {
         s = result.data;
@@ -92,49 +100,56 @@ export const ListStudent: React.FC = () => {
       return s;
     });
     console.log(data);
-
     setStudents(data);
   };
 
   const handle_Delete = (record: any) => {
     const items = students;
-    const index = items.findIndex((item: any) => item.id === record.id);
+    // const index = items.findIndex((item: any) => item.id === record.id);
     console.log(items);
-    const r = items.splice(index, 1);
-    setStudents(r);
+    const std = items.filter((item: any, index: number) => {
+      return item && item.id !== record.id;
+    });
+    console.log(std);
+    setStudents(std);
+    localStorage.setItem("student_list", JSON.stringify(std));
   };
- 
-  const onSearch = (value: string) =>{
-  
+
+  // tìm kiếm Name
+  const onSearch = (value: any) => {
     const items = students;
     let searchData = items.filter(function (obj) {
         return obj.name.toLowerCase().includes(value.toLowerCase());
     });
-   
     setStudents(searchData);
-}
+  };
+
+  //tìm kiếm Gender
+  const onChange: TableProps<Student>["onChange"] = (filters) => {
+    console.log(filters);
+  };
+
   return (
-    
     <>
       <div style={{ float: "right", marginBottom: 5 }}>
         <Button type="primary" onClick={openModal}>
           Add
         </Button>
+        <Button style={{ margin: 5 }} type="dashed" onClick={Reset}>
+          Reset
+        </Button>
       </div>
       <div style={{ float: "left", marginBottom: 5 }}>
-      <Search 
-          
+        <Search
           placeholder="input search text"
           allowClear
           enterButton="Search"
           size="large"
           onSearch={onSearch}
-          
         />
-         </div>
-      <Table columns={columns} dataSource={students} />
+      </div>
+      <Table columns={columns} dataSource={students} onChange={onChange} />
       <StudentModal ref={modalRef} />
     </>
   );
 };
-
