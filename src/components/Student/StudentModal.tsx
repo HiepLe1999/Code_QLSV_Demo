@@ -12,17 +12,14 @@ export const StudentModal = forwardRef((_props: any, ref: any) => {
   const [form] = Form.useForm();
 
   useImperativeHandle(ref, () => ({
-
-    show: (data ?: []) => {
+    show: (data?: []) => {
       return new Promise<SaveResult>((resolve) => {
         setIsModalVisible(true);
-        if(data)
-        form.setFieldsValue(data);
+        if (data) form.setFieldsValue(data);
         guard = resolve;
-
       });
     },
-    
+
     close: () => {
       setIsModalVisible(false);
     },
@@ -48,7 +45,7 @@ export const StudentModal = forwardRef((_props: any, ref: any) => {
   const onFinish = (values: any) => {
     console.log(values);
   };
- 
+
   const layout = {
     labelCol: { span: 2 },
     wrapperCol: { span: 22 },
@@ -66,13 +63,15 @@ export const StudentModal = forwardRef((_props: any, ref: any) => {
         width={1000}
       >
         <Form {...layout} form={form} name="control-hooks" onFinish={onFinish}>
-        <Form.Item
+          <Form.Item
             name="id"
             label="Mã SV"
-            rules={[{ required: true, message: "Name is required" }]}
+            rules={[
+              { required: true, message: "Name is required" },
+            ]}
           >
-          <Input />
-        </Form.Item>
+            <Input type={"number"} />
+          </Form.Item>
           <Form.Item
             name="name"
             label="Name"
@@ -85,7 +84,7 @@ export const StudentModal = forwardRef((_props: any, ref: any) => {
             label="Age"
             rules={[{ required: true, message: "Age is required" }]}
           >
-            <Input type={"number"} min={18} />
+            <Input type={"number"} min={12} max={60} />
           </Form.Item>
           <Form.Item
             name="address"
