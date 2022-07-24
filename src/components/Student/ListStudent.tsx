@@ -81,15 +81,31 @@ export const ListStudent: React.FC = () => {
   // Add
   const openModal = async () => {
     const result = await modalRef!.current!.show();
-    const data = [...students, result.data];
+    const data = [...students];
     setStudents(data);
-    console.log(data);
+    console.log('result',result);
+    console.log('data',data);
+    let check = false;
+    for(let i of data){
+      let tmp : Student = Object.assign({}, i);
+      if(tmp.id == result.data.id){
+        alert("Mã SV Trùng Nhau, Bạn vui lòng Nhập Lại!")
+        check =true;
+      }
+    }
+    if(!check)
+    {
+      const data = [...students, result.data];
+      setStudents(data);
+    }
     localStorage.setItem("student_list", JSON.stringify(data));
   };
   //  Reset
   const Reset = () => {
     window.location.reload();
   };
+
+  //edit 
   const handle_Edit = async (record: any) => {
     const result = await modalRef!.current!.show(record);
     console.log(result);
@@ -103,6 +119,7 @@ export const ListStudent: React.FC = () => {
     setStudents(data);
   };
 
+  //delete
   const handle_Delete = (record: any) => {
     const items = students;
     // const index = items.findIndex((item: any) => item.id === record.id);
