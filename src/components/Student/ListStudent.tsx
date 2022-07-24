@@ -95,10 +95,10 @@ export const ListStudent: React.FC = () => {
     }
     if(!check)
     {
-      const data = [...students, result.data];
-      setStudents(data);
+      const dataAdd = [...students, result.data];
+      setStudents(dataAdd);
+      localStorage.setItem("student_list", JSON.stringify(dataAdd));
     }
-    localStorage.setItem("student_list", JSON.stringify(data));
   };
   //  Reset
   const Reset = () => {
