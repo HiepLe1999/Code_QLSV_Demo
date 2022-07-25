@@ -83,8 +83,6 @@ export const ListStudent: React.FC = () => {
     const result = await modalRef!.current!.show();
     const data = [...students];
     setStudents(data);
-    console.log('result',result);
-    console.log('data',data);
     let check = false;
     for(let i of data){
       let tmp : Student = Object.assign({}, i);
@@ -99,6 +97,7 @@ export const ListStudent: React.FC = () => {
       setStudents(dataAdd);
       localStorage.setItem("student_list", JSON.stringify(dataAdd));
     }
+   
   };
   //  Reset
   const Reset = () => {
@@ -158,7 +157,7 @@ export const ListStudent: React.FC = () => {
       </div>
       <div style={{ float: "left", marginBottom: 5 }}>
         <Search
-          placeholder="input search text"
+          placeholder="input search name"
           allowClear
           enterButton="Search"
           size="large"
