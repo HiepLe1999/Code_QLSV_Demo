@@ -1,11 +1,17 @@
 import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import { Layout, Menu } from "antd";
 import React, { useState } from "react";
-import { ListStudent } from "./components/Student/ListStudent";
+import {Home} from "./components/Student/Home"
+import {Link, Outlet } from "react-router-dom";
 const { Header, Sider, Content } = Layout;
 
 const App: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const [current, setCurrent] = useState("1");
+
+  const onClick = (e: any) => {
+    setCurrent(e.key);
+  };
 
   return (
     <Layout>
@@ -14,11 +20,21 @@ const App: React.FC = () => {
         <Menu
           theme="light"
           mode="inline"
+          onClick={onClick}
+          selectedKeys={[current]}
           defaultSelectedKeys={["1"]}
           items={[
             {
               key: "1",
-              label: "Trang chủ",
+              label: <a href="/">Trang chủ</a>,
+            },
+            {
+              key: "2",
+              label: <Link to="/liststudent">Sinh viên</Link>,
+            },
+            {
+              key: "3",
+              label: <Link to="/classstudent">Lớp</Link>,
             },
           ]}
         />
@@ -41,10 +57,10 @@ const App: React.FC = () => {
             height: window.innerHeight,
           }}
         >
-          
           <div>
-            <ListStudent />
+          <Home/>
           </div>
+          <Outlet/>
         </Content>
       </Layout>
     </Layout>
